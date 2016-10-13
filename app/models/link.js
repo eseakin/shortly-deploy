@@ -16,18 +16,26 @@ var crypto = require('crypto');
 //   }
 // });
 
-var Link = function(attributes) {
+var Schema = db.Schema;
+var Objectid = Schema.ObjectId;
 
-  var newLink = new UrlData(attributes);
-  var promise = newLink.save();
-  return promise.then(function(doc) {
-    var shasum = crypto.createHash('sha1');
-    shasum.update(doc.url);
-    doc.code = shasum.digest('hex').slice(0, 5);
-    return doc;
-  });
-};
+var linkSchema = new Schema({
+  id: Objectid,
+  url: String,
+  baseUrl: String,
+  code: String,
+  title: String,
+  visits: Number,
+  timestamp: { type: Date, default: Date.now }
+});
 
-// new Link({ url: uri })
+linkSchema.pre('save', function(next) {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(this.get('url'));
+  this.set('code', shasum.digest('hex').slice(0, 5));
+  next();
+});
+
+var Link = db.model('Link', linkSchema);
 
 module.exports = Link;

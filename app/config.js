@@ -1,41 +1,6 @@
-var mongoose = require('mongoose');
-var path = require('path');
+var db = require('mongoose');
 
-mongoose.connect(path.join(__dirname, '../db'));
-
-var db = mongoose.connection;
-var Schema = mongoose.Schema;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  var urlSchema = new Schema({
-    id: Objectid,
-    url: String,
-    baseUrl: String,
-    code: String,
-    title: String,
-    visits: Number,
-    timestamp: { type: Date, default: Date.now }
-  });
-
-  urlSchema.methods.initialize = function() {
-    this.on('creating', function(model, attrs, options) {
-      var shasum = crypto.createHash('sha1');
-      shasum.update(model.get('url'));
-      model.set('code', shasum.digest('hex').slice(0, 5));
-    });
-  };
-
-  var userSchema = new Schema({
-    id: Objectid,
-    username: String,
-    password: String,
-    timestamp: { type: Date, default: Date.now }
-  });
-
-  var UrlData = mongoose.model('Url', urlSchema);
-  var UserData = mongoose.model('User', userSchema);
-});
+db.connect('mongodb://localhost');
 
 // var path = require('path');
 // var knex = require('knex')({
