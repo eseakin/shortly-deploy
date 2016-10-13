@@ -27,7 +27,7 @@ var Objectid = Schema.ObjectId;
 
 var userSchema = new Schema({
   id: Objectid,
-  username: String,
+  username: { type: String, unique: true},
   password: String,
   timestamp: { type: Date, default: Date.now }
 });
@@ -39,15 +39,19 @@ userSchema.pre('save', function(next) {
 
 userSchema.methods.comparePassword = function(attemptedPassword, callback) {
   bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+    console.log('comparing password...', this.password, isMatch);
     callback(isMatch);
   });
 };
 
 userSchema.methods.hashPassword = function() {
+  console.log('password', this.get('password'));
   var cipher = Promise.promisify(bcrypt.hash);
   return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
-      this.password = hash;
+      console.log('password', this.get('password'));
+      this.set('password', hash);
+      console.log('password', this.get('password'));
     });
 };
 

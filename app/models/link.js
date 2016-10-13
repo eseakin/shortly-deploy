@@ -21,7 +21,7 @@ var Objectid = Schema.ObjectId;
 
 var linkSchema = new Schema({
   id: Objectid,
-  url: String,
+  url: { type: String, unique: true },
   baseUrl: String,
   code: String,
   title: String,

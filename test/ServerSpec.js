@@ -170,7 +170,7 @@ describe('', function() {
   }); // 'Privileged Access'
 
   describe('Account Creation:', function() {
-
+    this.timeout(10000);
     it('Signup creates a new user', function(done) {
       request(app)
         .post('/signup')
@@ -188,6 +188,7 @@ describe('', function() {
     });
 
     it('Successful signup logs in a new user', function(done) {
+      this.timeout(10000);
       request(app)
         .post('/signup')
         .send({
@@ -206,8 +207,11 @@ describe('', function() {
   }); // 'Account Creation'
 
   describe('Account Login:', function() {
+    this.timeout(10000);
 
     beforeEach(function(done) {
+      this.timeout(10000);
+      setTimeout(done, 10000);      
       new User({
         'username': 'Phillip',
         'password': 'Phillip'
