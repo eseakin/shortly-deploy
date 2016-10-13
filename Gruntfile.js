@@ -110,7 +110,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'eslint', 'concat', 'uglify'
+    'mochaTest', 'eslint', 'concat', 'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -121,9 +121,12 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-    'gitpush'
-  ]);
+  grunt.registerTask('deploy', function(n) {
+    if (grunt.option('prod')) {
+      // add your production server task here
+      grunt.task.run([ 'build', 'gitpush' ]);
+    }
+  });
 
 
 };
