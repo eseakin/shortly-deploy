@@ -211,7 +211,7 @@ describe('', function() {
 
     beforeEach(function(done) {
       this.timeout(10000);
-      setTimeout(done, 10000);      
+      setTimeout(null, 10000);      
       new User({
         'username': 'Phillip',
         'password': 'Phillip'
